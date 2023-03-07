@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-
+apply plugin: "com.facebook.react"
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -82,8 +82,6 @@ project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
 ]
 
-apply from: "../../node_modules/react-native/react.gradle"
-
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -130,9 +128,10 @@ def reactNativeArchitectures() {
 }
 
 android {
+    namespace 'com.x3ntech.investmenttracker'
     ndkVersion rootProject.ext.ndkVersion
+    compileSdk rootProject.ext.compileSdkVersion
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "com.x3ntech.investmenttracker"
