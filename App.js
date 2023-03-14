@@ -2,9 +2,11 @@ import React, {useEffect} from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Main from './src/Screens/Main/Main';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import { getStore } from './src/engine/store';
 import SplashScreen from 'react-native-splash-screen';
+import Login from './src/Screens/Login/Login';
+import {StatusBar} from 'react-native';
 
 const darkTheme = {
   ...DefaultTheme,
@@ -24,12 +26,18 @@ const App = () => {
 
   useEffect(() => {
     SplashScreen.hide();
-  });
+  }, []);
 
   return (
       <Provider store={getStore()}>
+        <StatusBar
+            backgroundColor="transparent"
+            translucent={true}
+            barStyle="light-content"
+        />
         <NavigationContainer theme={darkTheme}>
-          <Stack.Navigator>
+          <Stack.Navigator  initialRouteName="Login">
+            <Stack.Screen name="Login" component={Login}  options={{ headerShown:false }}/>
             <Stack.Screen name="Home" component={Main}  options={{ headerShown:false }}/>
           </Stack.Navigator>
         </NavigationContainer>

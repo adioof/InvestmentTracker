@@ -1,0 +1,27 @@
+export const COLORS = {
+  PRIMARY: '#ffffff',
+  SECONDARY: '#EEEDFF',
+  TRANSPARENT: 'rgba(0,0,0,0)',
+
+  BG_PRIMARY: '#000000',
+  BG_SECONDARY: '#3b3b3b',
+
+  BG_INVERSE: '#fff',
+  BG_SECONDARY_INVERSE: '#cfcfcf',
+
+  BLACK: '#1A1A1A',
+
+  LIGHT_RED: '#D3626D',
+  YELLOW: '#F7A928',
+  LIGHT_PRIMARY: '#bfbcff',
+  LIGHT_GREEN: '#41CD70',
+
+  TEXT: '#1A1A1A',
+  TEXT_GREY: '#6A6A6A',
+  DARK_GREY: '#757575',
+  LIGHT_GREY: '#bababa',
+
+  ACTIVITY_BG_COLOR: '#F4F3FF',
+  BRIGHT_RED: '#E7A4AB',
+  BRIGHT_GREEN: '#8DDEA8',
+};

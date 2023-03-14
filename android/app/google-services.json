@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "573725274677",
+    "project_id": "investment-tracker1",
+    "storage_bucket": "investment-tracker1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573725274677:android:2d201441cc6b2853d9777c",
+        "android_client_info": {
+          "package_name": "com.x3ntech.investmenttracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "573725274677-0912ghl61815mschj3s5j68f6fugipji.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.x3ntech.investmenttracker",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "573725274677-mto5c5ai5k97ijus51tc57tug74b9vs6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.x3ntech.investmenttracker",
+            "certificate_hash": "2baa7dc9e5c0849035e377913a4c8d8c7cef15db"
+          }
+        },
+        {
+          "client_id": "573725274677-tuifhonvjckd4qbm5nh0av0q1biupaol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfks-dSIT6r25jyiTMk3bNDaEX4NJ4jzM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "573725274677-soacadt27vvbm3q9oipb85tro11uu679.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

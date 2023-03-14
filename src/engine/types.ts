@@ -1,10 +1,7 @@
-import { ForkEffect } from 'redux-saga/effects';
 
 export interface IComponent {
   componentId: string;
 }
-
-export type IEffectsMaps = Generator<ForkEffect<never>, void, unknown>[];
 
 export interface IReducersMaps {
   [key: string]: any;
