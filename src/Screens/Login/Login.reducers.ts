@@ -11,6 +11,13 @@ export const loginReducer = (
         case actions.PERFORM_GOOGLE_LOGIN_SUCCESS:
             return {
                 ...state,
+                user: action.payload,
+                isLoggedIn: true,
+            };
+        case actions.SET_PAGE:
+            return {
+                ...state,
+                page: action.payload,
             };
         default: {
             return state;

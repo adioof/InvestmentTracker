@@ -1,12 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Dimensions, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {checkIsLoggedIn, performGoogleLogin} from './Login.actions';
+import {checkIsLoggedIn, performGoogleLogin, setPage} from './Login.actions';
 import {ILoginState} from './Login.Types';
 import {PAGE} from './Login.state';
 import {LoginPage} from './Components/LoginPage';
 import {WelcomePage} from './Components/WelcomePage';
-import {Loader} from '../../components/Loader';
+import {Loader, LOADER_TYPE} from '../../components/Loader';
+import {StackActions} from '@react-navigation/native';
+import {SCREENS} from '../../engine/types';
 
 const width = Dimensions.get('screen').width;
 
@@ -14,10 +16,10 @@ const width = Dimensions.get('screen').width;
 const Login = ({ navigation }) => {
 
     const dispatch = useDispatch();
-    const [page, setPage] = useState(PAGE.LOADING_PAGE);
 
     const landingState: ILoginState = useSelector((state: any) => state.login);
     const isLoggedIn = landingState.isLoggedIn;
+    const page = landingState.page;
 
     useEffect(() => {
         dispatch(checkIsLoggedIn());
@@ -33,17 +35,18 @@ const Login = ({ navigation }) => {
     };
 
     useEffect(() => {
+        console.log('checking is logged in', isLoggedIn);
         if (isLoggedIn) {
-            navigation.navigate('Home');
+            navigation.dispatch(StackActions.replace(SCREENS.HOME));
         } else {
-            setPage(PAGE.WELCOME_PAGE);
+            dispatch(setPage(PAGE.WELCOME_PAGE));
         }
     }, [isLoggedIn]);
 
     return (
         <View style={{flex: 1, width: width, marginTop: 30}}>
-            {page === PAGE.LOADING_PAGE && <Loader/>}
-            {page === PAGE.WELCOME_PAGE && <WelcomePage onClick={() => setPage(PAGE.LOGIN_PAGE)}/>}
+            {page === PAGE.LOADING_PAGE && <Loader loader={LOADER_TYPE.BURGER_LOADER}/>}
+            {page === PAGE.WELCOME_PAGE && <WelcomePage onClick={() => dispatch(setPage(PAGE.LOGIN_PAGE))}/>}
             {page === PAGE.LOGIN_PAGE && <LoginPage onClick={handleGoogleLogin}/>}
         </View>
     );

@@ -14,8 +14,8 @@ export const SuccessLogger = (text: string, data?: any): void => {
     : console.log(chalk.white.bgGreen.bold(text));
 };
 
-export const ErrorLogger = (error: Error, errorType? = 'unTagged',
-                            isFatal? = false): void => {
+export const ErrorLogger = (error: Error, errorType = 'unTagged',
+                            isFatal = false): void => {
   if (error) {
     /* if (!__DEV__) {
       if (Tracker.Crashlytics) {
@@ -30,6 +30,8 @@ export const ErrorLogger = (error: Error, errorType? = 'unTagged',
         Tracker.Sentry.captureException(error);
       }
     }*/
+    console.log(errorType);
+    console.log(isFatal);
     if (error.message) {
       console.log(chalk.white.bgRed.bold(error.message), error);
     } else {

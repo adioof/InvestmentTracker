@@ -7,5 +7,5 @@ function* loadSessionSaga() {
 }
 
 export default [
-    ...loadSessionSaga()
+    ...loadSessionSaga(),
 ];

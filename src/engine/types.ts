@@ -18,3 +18,9 @@ export interface MetaProps {
   dismiss?: string[];
   [x: string]: any;
 }
+
+export enum SCREENS {
+  SPLASHSCREEN = 'SPLASHSCREEN',
+  LOGIN = 'LOGIN',
+  HOME = 'HOME'
+}

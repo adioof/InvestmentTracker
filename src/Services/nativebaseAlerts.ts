@@ -1,4 +1,3 @@
-import { CustomStyle } from '../../engine/types/common.types';
 export interface CustomStyle {
   [key: string]: string | number | CustomStyle;
 }
@@ -21,13 +20,13 @@ export interface AlertData {
   textStyle?: CustomStyle;
 }
 
-export const showNativeBaseAlert = (alertProps: AlertData): void => {
-  /* Toast.show({
-    text: alertProps.message,
-    duration: alertProps.duration,
-    type: alertProps.type,
-    position: alertProps.position,
-    style: alertProps.style,
-    textStyle: alertProps.textStyle,
-  });*/
+export const showAlert = (alertProps: AlertData): void => {
+   /* Toast.show({
+        text: alertProps.message,
+        duration: alertProps.duration,
+        type: alertProps.type,
+        position: alertProps.position,
+        style: alertProps.style,
+        textStyle: alertProps.textStyle,
+    });*/
 };

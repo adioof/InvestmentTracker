@@ -1,18 +1,10 @@
-export interface ILoginState {
-    loading: boolean;
-    isLoggedIn: false
-}
+import {IUser} from '../../Services/Firebase.Types';
+import {PAGE} from './Login.state';
 
-export interface IUserProfile {
-    isOnboarded: boolean;
-    userName: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    picture: string;
-    userId: string;
-    token: string;
-    phoneNumber: string;
+export interface ILoginState {
+    page: PAGE
+    isLoggedIn: boolean;
+    user? : IUser;
 }
 
 export interface IUserCredential {

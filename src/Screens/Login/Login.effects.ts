@@ -1,37 +1,26 @@
-import {actions, performGoogleLoginSuccess} from './Login.actions';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import {actions, performGoogleLoginSuccess, setPage} from './Login.actions';
+import {call, put, takeLatest} from 'redux-saga/effects';
 import {getUserDetails, initGoogleAuth, loginWithGoogle} from '../../Services/Firebase';
-import {IUserProfile} from './Login.Types';
-import {AlertPosition, AlertType, showNativeBaseAlert} from '../../Services/nativebaseAlerts';
+import {AlertPosition, AlertType, showAlert} from '../../Services/nativebaseAlerts';
 import {ErrorLogger, errorType} from '../../Services/logger';
+import {IUser} from '../../Services/Firebase.Types';
+import {PAGE} from './Login.state';
 
 function* performGoogleLoginEffect() {
     try {
-        // @ts-ignore
-        const user = yield call(loginWithGoogle);
-        // todo user thing get data and all
-        const userProfile: IUserProfile = {
-            userId: user.id,
-            userName: user.name,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            picture: user.photo,
-            email: user.email,
-            isOnboarded: user.isOnboarded,
-            phoneNumber: user.phone,
-            token: user.token,
-        };
-        console.log(userProfile);
-        yield put(performGoogleLoginSuccess(userProfile));
-        if (userProfile.userId) {
-            if (userProfile.isOnboarded) {
-                //
-            } else {
-                // fetchQuestionnairesEffect();
-            }
+        yield put(setPage(PAGE.LOADING_PAGE));
+        const user : IUser = yield call(loginWithGoogle);
+        if (user.userID) {
+            yield put(performGoogleLoginSuccess(user));
+            showAlert({
+                type: AlertType.SUCCESS,
+                message: 'Login Success',
+                duration: 2000,
+                position: AlertPosition.BOTTOM,
+            });
         }
     } catch (e : any) {
-        showNativeBaseAlert({
+        showAlert({
             type: AlertType.DANGER,
             message: `Login Failed! Because ${e.message}`,
             duration: 2000,
@@ -43,18 +32,11 @@ function* performGoogleLoginEffect() {
 
 function* checkLoggedInEffect() {
     try {
+        // this method is called the first time on app entry so init is here
         initGoogleAuth();
-        const user: IUserProfile = yield call(getUserDetails);
-        console.log(user);
-        if (user.userId) {
-            if (user.isOnboarded) {
-                //
-            } else {
-                //
-            }
+        const user : IUser = yield call(getUserDetails);
+        if (user.userID) {
             yield put(performGoogleLoginSuccess(user));
-        } else {
-            // yield put(showLoginPage());
         }
     } catch (e : any) {
         ErrorLogger(e, errorType.userBreaking);

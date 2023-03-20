@@ -7,6 +7,8 @@ import { getStore } from './src/engine/store';
 import SplashScreen from 'react-native-splash-screen';
 import Login from './src/Screens/Login/Login';
 import {StatusBar} from 'react-native';
+import Splash from './src/Screens/Splash';
+import {SCREENS} from './src/engine/types';
 
 const darkTheme = {
   ...DefaultTheme,
@@ -36,9 +38,10 @@ const App = () => {
             barStyle="light-content"
         />
         <NavigationContainer theme={darkTheme}>
-          <Stack.Navigator  initialRouteName="Login">
-            <Stack.Screen name="Login" component={Login}  options={{ headerShown:false }}/>
-            <Stack.Screen name="Home" component={Main}  options={{ headerShown:false }}/>
+          <Stack.Navigator  initialRouteName={SCREENS.SPLASHSCREEN}>
+              <Stack.Screen name={SCREENS.SPLASHSCREEN} component={Splash}  options={{ headerShown:false }}/>
+              <Stack.Screen name={SCREENS.LOGIN} component={Login}  options={{ headerShown:false }}/>
+              <Stack.Screen name={SCREENS.HOME} component={Main}  options={{ headerShown:false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

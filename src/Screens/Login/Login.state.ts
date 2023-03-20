@@ -9,6 +9,6 @@ export enum PAGE {
 }
 
 export const LoginState: ILoginState = {
-  loading: true,
+  page: PAGE.LOADING_PAGE,
   isLoggedIn: false,
 };

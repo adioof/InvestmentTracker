@@ -1,10 +1,10 @@
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
 import {IUserCredential} from '../Screens/Login/Login.Types';
-import {IFirebaseUser} from './Firebase.Types';
-import {AlertPosition, AlertType, showNativeBaseAlert} from './nativebaseAlerts';
+import {IUser} from './Firebase.Types';
+import {AlertPosition, AlertType, showAlert} from './nativebaseAlerts';
 import {ErrorLogger, errorType} from './logger';
 
 let userID = auth().currentUser?.uid || '';
@@ -17,17 +17,19 @@ export const initGoogleAuth = (): void => {
     });
 };
 
-export const loginWithGoogle = async (): Promise<IUserCredential> => {
+const getMessagingToken = async () => {
+    await messaging().requestPermission();
+    return await messaging().getToken();
+};
+
+export const loginWithGoogle = async (): Promise<IUser> => {
     try {
-        console.log('logging in - here');
         // Get the users ID token
         const { idToken } = await GoogleSignin.signIn();
-        console.log(idToken);
         // Create a Google credential with the token
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         // Sign-in the user with the credential
 
-        console.log(googleCredential);
         const userCredential: IUserCredential = (await auth().signInWithCredential(
             googleCredential
         )) as any;
@@ -38,20 +40,32 @@ export const loginWithGoogle = async (): Promise<IUserCredential> => {
             .doc(userID)
             .get();
 
+        const token = await getMessagingToken();
+
         if (firebaseUser.exists) {
-            const user: any = await firestore()
+            const user = firebaseUser.data() as IUser;
+            user.token = token;
+
+            // whenever an existing user logs in, update the following values
+            await firestore()
                 .collection('users')
                 .doc(userID)
-                .get();
-            return {
-                ...user.data(),
-                id: user.id,
-                isNewUser: false,
-            };
+                .update({
+                    token: token,
+                    updatedAt: firestore.FieldValue.serverTimestamp() as any,
+                });
+
+            showAlert({
+                type: AlertType.SUCCESS,
+                message: `Welcome Back! ${user.firstName}`,
+                duration: 2000,
+                position: AlertPosition.BOTTOM,
+            });
+            return user;
         } else {
-            await messaging().requestPermission();
-            const token = await messaging().getToken();
-            const newFirebaseUser: IFirebaseUser = {
+            const newFirebaseUser: IUser = {
+                userID: userID,
+                username: '',
                 name: userCredential.user._user.displayName || '',
                 firstName: userCredential.additionalUserInfo?.profile?.given_name || '',
                 lastName: userCredential.additionalUserInfo?.profile?.family_name || '',
@@ -61,26 +75,26 @@ export const loginWithGoogle = async (): Promise<IUserCredential> => {
                 photo: userCredential.user._user.photoURL,
                 token: token,
                 createdAt: firestore.FieldValue.serverTimestamp() as any,
+                updatedAt: firestore.FieldValue.serverTimestamp() as any,
             };
             await firestore()
                 .collection('users')
-                .doc(userCredential.user._user.uid)
+                .doc(userID)
                 .set(newFirebaseUser);
-            const user: any = await firestore()
-                .collection('users')
-                .doc(userCredential.user._user.uid)
-                .get();
-            return {
-                ...user.data(),
-                id: user.id,
-                isNewUser: true,
-            };
+
+            showAlert({
+                type: AlertType.SUCCESS,
+                message: `Welcome! ${newFirebaseUser.firstName}`,
+                duration: 2000,
+                position: AlertPosition.BOTTOM,
+            });
+            return newFirebaseUser;
         }
     } catch (e : any) {
         ErrorLogger(e, errorType.userBreaking);
-        showNativeBaseAlert({
+        showAlert({
             type: AlertType.WARNING,
-            message: 'Please select an option',
+            message: 'There was an error!',
             duration: 2000,
             position: AlertPosition.BOTTOM,
         });
@@ -88,52 +102,11 @@ export const loginWithGoogle = async (): Promise<IUserCredential> => {
     }
 };
 
-export const getUserDetails = async (): Promise<any> => {
-    const userDetails = auth().currentUser;
-    let userProfile = {
-        isNewUser: false,
-    } as any;
-    if (userDetails?.displayName) {
-        userProfile = {
-            ...userProfile,
-            userName: userDetails.displayName,
-        };
-    }
-    if (userDetails?.email) {
-        userProfile = {
-            ...userProfile,
-            email: userDetails.email,
-        };
-    }
-    if (userDetails?.uid) {
-        userProfile = {
-            ...userProfile,
-            userId: userDetails.uid,
-        };
-    }
-    if (userDetails?.photoURL) {
-        userProfile = {
-            ...userProfile,
-            picture: userDetails.photoURL,
-        };
-    }
-    if (userDetails?.phoneNumber) {
-        userProfile = {
-            ...userProfile,
-            phoneNumber: userDetails.phoneNumber,
-        };
-    }
-
+export const getUserDetails = async (): Promise<IUser> => {
     const user: any = await firestore()
         .collection('users')
         .doc(userID)
         .get();
-    if (user.exists) {
-        userProfile = {
-            ...userProfile,
-            isOnboarded: (user.data && user.data() && user.data().isOnboarded || false),
-            firstName: (user.data && user.data() && user.data().firstName || 'User'),
-        };
-    }
-    return userProfile;
+
+    return user.data() as IUser || {};
 };
