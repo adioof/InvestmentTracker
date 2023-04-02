@@ -1,7 +1,7 @@
 import {ILoginState} from './Login.Types';
 
 
-export enum PAGE {
+export enum LOGIN_PAGE {
   LOADING_PAGE,
   WELCOME_PAGE,
   LOGIN_PAGE,
@@ -9,6 +9,6 @@ export enum PAGE {
 }
 
 export const LoginState: ILoginState = {
-  page: PAGE.LOADING_PAGE,
+  loginPage: LOGIN_PAGE.LOADING_PAGE,
   isLoggedIn: false,
 };

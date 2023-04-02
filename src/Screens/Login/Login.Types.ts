@@ -1,8 +1,8 @@
 import {IUser} from '../../Services/Firebase.Types';
-import {PAGE} from './Login.state';
+import {LOGIN_PAGE} from './Login.state';
 
 export interface ILoginState {
-    page: PAGE
+    loginPage: LOGIN_PAGE
     isLoggedIn: boolean;
     user? : IUser;
 }

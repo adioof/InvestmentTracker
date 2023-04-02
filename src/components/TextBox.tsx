@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
+import {getFontFromWeight} from '../engine/helper';
 
 // @ts-ignore
 export const TextBox = (props) => {
@@ -17,43 +18,11 @@ export const TextBox = (props) => {
     return props.style;
   };
 
-  const font = () => {
-    if (weight) {
-      switch (weight) {
-        case '100':
-          return 'Poppins-Thin';
-        case '200':
-          return 'Poppins-ExtraLight';
-        case '300':
-          return 'Poppins-Light';
-        case '400':
-          return 'Poppins-Regular';
-        case '500':
-          return 'Poppins-Medium';
-        case '600':
-          return 'Poppins-SemiBold';
-        case '700':
-          return 'Poppins-Bold';
-        case 'bold':
-          return 'Poppins-Bold';
-        case '800':
-          return 'Poppins-ExtraBold';
-        case '900':
-          return 'Poppins-Black';
-        default:
-          return 'Poppins-Regular';
-      }
-    }
-
-    return 'Poppins-Regular';
-  };
-
-
   return (
     <Text
       style={[
           {
-            fontFamily: font(),
+            fontFamily: getFontFromWeight(weight),
             color: '#fff',
           },
           styles(),

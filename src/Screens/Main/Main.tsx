@@ -1,24 +1,35 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
-import {IComponent} from '../../engine/types';
-import {useTheme} from '@react-navigation/native';
+import {StackActions, useTheme} from '@react-navigation/native';
 import {TextBox} from '../../components/TextBox';
 import {ILoginState} from '../Login/Login.Types';
-import {useSelector} from 'react-redux';
-import {AlertPosition, AlertType, showAlert} from '../../Services/nativebaseAlerts';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUserDetails} from '../Login/Login.actions';
+import {getTime} from '../../engine/helper';
+import CircleAddButton from '../../components/CircleAddButton';
+import {SCREENS} from '../../engine/types';
 
-const Main: React.FC<IComponent> = () => {
-  const {colors} = useTheme();
+const Main  = ({ navigation } : any) => {
 
-  useEffect(() => {
+    const {colors} = useTheme();
 
-  });
+    const loginState: ILoginState = useSelector((state: any) => state.login);
+    const dispatch = useDispatch();
 
-  return (
-      <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-        <TextBox>{'hello'}</TextBox>
-      </View>
-  );
+    useEffect(() => {
+        dispatch(setUserDetails());
+    });
+
+    const onCirclePress = () => {
+        navigation.dispatch(StackActions.push(SCREENS.ADD_TRANSACTION));
+    };
+
+    return (
+        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+            <TextBox>{getTime(loginState.user?.createdAt)}</TextBox>
+            <CircleAddButton onPress={onCirclePress}/>
+        </View>
+    );
 };
 
 export default Main;

@@ -17,7 +17,7 @@ export const loginReducer = (
         case actions.SET_PAGE:
             return {
                 ...state,
-                page: action.payload,
+                loginPage: action.payload,
             };
         default: {
             return state;

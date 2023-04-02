@@ -28,3 +28,7 @@ Follow this link for complete guide : [StackOverflow](https://stackoverflow.com/
 ### Splash screen
 edit the following xml file to change the splashcreen
 > android/src/main/layout/launch_screen.xml
+
+### New fonts
+Just Add the fonts in the root Asset folder and run
+> npx react-native-asset

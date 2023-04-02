@@ -3,9 +3,10 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
 import {IUserCredential} from '../Screens/Login/Login.Types';
-import {IUser} from './Firebase.Types';
+import {ITransaction, IUser} from './Firebase.Types';
 import {AlertPosition, AlertType, showAlert} from './nativebaseAlerts';
 import {ErrorLogger, errorType} from './logger';
+import {TRANSACTIONS_COLLECTION, USERS_COLLECTION} from '../engine/constants';
 
 let userID = auth().currentUser?.uid || '';
 
@@ -36,7 +37,7 @@ export const loginWithGoogle = async (): Promise<IUser> => {
         userID = userCredential.user._user.uid;
 
         const firebaseUser = await firestore()
-            .collection('users')
+            .collection(USERS_COLLECTION)
             .doc(userID)
             .get();
 
@@ -48,7 +49,7 @@ export const loginWithGoogle = async (): Promise<IUser> => {
 
             // whenever an existing user logs in, update the following values
             await firestore()
-                .collection('users')
+                .collection(USERS_COLLECTION)
                 .doc(userID)
                 .update({
                     token: token,
@@ -74,11 +75,11 @@ export const loginWithGoogle = async (): Promise<IUser> => {
                 phone: userCredential.user._user.phoneNumber,
                 photo: userCredential.user._user.photoURL,
                 token: token,
-                createdAt: firestore.FieldValue.serverTimestamp() as any,
-                updatedAt: firestore.FieldValue.serverTimestamp() as any,
+                createdAt: firestore.FieldValue.serverTimestamp(),
+                updatedAt: firestore.FieldValue.serverTimestamp(),
             };
             await firestore()
-                .collection('users')
+                .collection(USERS_COLLECTION)
                 .doc(userID)
                 .set(newFirebaseUser);
 
@@ -104,9 +105,20 @@ export const loginWithGoogle = async (): Promise<IUser> => {
 
 export const getUserDetails = async (): Promise<IUser> => {
     const user: any = await firestore()
-        .collection('users')
+        .collection(USERS_COLLECTION)
         .doc(userID)
         .get();
 
     return user.data() as IUser || {};
+};
+
+export const addTransactionFirebase = async (transaction: ITransaction): Promise<string> => {
+    const transactionRef: any = await firestore()
+        .collection(TRANSACTIONS_COLLECTION)
+        .add(transaction);
+
+    const transactionId = transactionRef.id;
+    console.log(`New transaction created with ID: ${transactionId}`);
+
+    return transactionId;
 };

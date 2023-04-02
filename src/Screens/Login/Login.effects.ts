@@ -4,11 +4,11 @@ import {getUserDetails, initGoogleAuth, loginWithGoogle} from '../../Services/Fi
 import {AlertPosition, AlertType, showAlert} from '../../Services/nativebaseAlerts';
 import {ErrorLogger, errorType} from '../../Services/logger';
 import {IUser} from '../../Services/Firebase.Types';
-import {PAGE} from './Login.state';
+import {LOGIN_PAGE} from './Login.state';
 
 function* performGoogleLoginEffect() {
     try {
-        yield put(setPage(PAGE.LOADING_PAGE));
+        yield put(setPage(LOGIN_PAGE.LOADING_PAGE));
         const user : IUser = yield call(loginWithGoogle);
         if (user.userID) {
             yield put(performGoogleLoginSuccess(user));
@@ -26,6 +26,17 @@ function* performGoogleLoginEffect() {
             duration: 2000,
             position: AlertPosition.BOTTOM,
         });
+        console.log(e);
+    }
+}
+
+function* setUserDetailsEffect() {
+    try {
+        const user : IUser = yield call(getUserDetails);
+        if (user.userID) {
+            yield put(performGoogleLoginSuccess(user));
+        }
+    } catch (e : any) {
         console.log(e);
     }
 }
@@ -52,7 +63,13 @@ function* performGoogleLoginSaga() {
     yield takeLatest(actions.PERFORM_GOOGLE_LOGIN, performGoogleLoginEffect);
 }
 
+function* getUserDetailsSaga() {
+    yield takeLatest(actions.SET_USER_DETAILS, setUserDetailsEffect);
+}
+
+
 export default [
     ...checkLoggedInSaga(),
     ...performGoogleLoginSaga(),
+    ...getUserDetailsSaga(),
 ];

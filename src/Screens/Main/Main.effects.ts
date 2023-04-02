@@ -1,11 +1,7 @@
-function* loadSessionEffect() {
 
-}
-
-function* loadSessionSaga() {
-
+function* addTransactionSaga() {
 }
 
 export default [
-    ...loadSessionSaga(),
+    ...addTransactionSaga(),
 ];

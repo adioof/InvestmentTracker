@@ -6,6 +6,8 @@ import {loginReducer} from '../Screens/Login/Login.reducers';
 import LoginEffects from '../Screens/Login/Login.effects';
 import {all} from 'redux-saga/effects';
 import {IReducersMaps} from './types';
+import AddTransactionEffects from '../Screens/AddTransaction/AddTransaction.effects';
+import {addTransactionReducers} from '../Screens/AddTransaction/AddTransaction.reducers';
 
 const sagaMiddleware = createSagaMiddleware();
 const effects = (effectsMaps: any) => function* effects(): Generator {
@@ -17,10 +19,12 @@ export const getStore = (): any => {
   const _store = createStore(reducers({
     main: mainReducer,
     login: loginReducer,
+    addTransaction: addTransactionReducers,
   }), applyMiddleware(sagaMiddleware));
   sagaMiddleware.run(effects([
     ...MainEffects,
     ...LoginEffects,
+    ...AddTransactionEffects,
   ]));
   return _store;
 };

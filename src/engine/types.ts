@@ -22,5 +22,18 @@ export interface MetaProps {
 export enum SCREENS {
   SPLASHSCREEN = 'SPLASHSCREEN',
   LOGIN = 'LOGIN',
-  HOME = 'HOME'
+  HOME = 'HOME',
+  ADD_TRANSACTION = 'ADD_TRANSACTION'
+}
+
+export enum ASSET_TYPE {
+  STOCKS = 'Stocks',
+  CRYPTO = 'Crypto',
+  MUTUAL_FUNDS = 'Mutual Funds',
+}
+
+export enum TRANSACTION_TYPE {
+  BUY = 'buy',
+  SELL = 'sell',
+  TRANSFER = 'transfer',
 }

@@ -3,7 +3,7 @@ import {Dimensions, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {checkIsLoggedIn, performGoogleLogin, setPage} from './Login.actions';
 import {ILoginState} from './Login.Types';
-import {PAGE} from './Login.state';
+import {LOGIN_PAGE} from './Login.state';
 import {LoginPage} from './Components/LoginPage';
 import {WelcomePage} from './Components/WelcomePage';
 import {Loader, LOADER_TYPE} from '../../components/Loader';
@@ -17,9 +17,9 @@ const Login = ({ navigation }) => {
 
     const dispatch = useDispatch();
 
-    const landingState: ILoginState = useSelector((state: any) => state.login);
-    const isLoggedIn = landingState.isLoggedIn;
-    const page = landingState.page;
+    const loginState: ILoginState = useSelector((state: any) => state.login);
+    const isLoggedIn = loginState.isLoggedIn;
+    const page = loginState.loginPage;
 
     useEffect(() => {
         dispatch(checkIsLoggedIn());
@@ -39,15 +39,15 @@ const Login = ({ navigation }) => {
         if (isLoggedIn) {
             navigation.dispatch(StackActions.replace(SCREENS.HOME));
         } else {
-            dispatch(setPage(PAGE.WELCOME_PAGE));
+            dispatch(setPage(LOGIN_PAGE.WELCOME_PAGE));
         }
     }, [isLoggedIn]);
 
     return (
         <View style={{flex: 1, width: width, marginTop: 30}}>
-            {page === PAGE.LOADING_PAGE && <Loader loader={LOADER_TYPE.BURGER_LOADER}/>}
-            {page === PAGE.WELCOME_PAGE && <WelcomePage onClick={() => dispatch(setPage(PAGE.LOGIN_PAGE))}/>}
-            {page === PAGE.LOGIN_PAGE && <LoginPage onClick={handleGoogleLogin}/>}
+            {page === LOGIN_PAGE.LOADING_PAGE && <Loader loader={LOADER_TYPE.BURGER_LOADER}/>}
+            {page === LOGIN_PAGE.WELCOME_PAGE && <WelcomePage onClick={() => dispatch(setPage(LOGIN_PAGE.LOGIN_PAGE))}/>}
+            {page === LOGIN_PAGE.LOGIN_PAGE && <LoginPage onClick={handleGoogleLogin}/>}
         </View>
     );
 };
