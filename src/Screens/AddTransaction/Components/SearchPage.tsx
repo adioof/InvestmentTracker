@@ -2,14 +2,19 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {TextBox} from '../../../components/TextBox';
 import {ALPHA_VANTAGE_API} from '../../../engine/constants';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setPage} from '../AddTransaction.actions';
 import {TRANSACTION_PAGE} from '../AddTransaction.state';
+import {IAddTransactionState} from '../AddTransaction.types';
+import {ASSET_TYPE} from '../../../engine/types';
 
 const SearchPage = () => {
+
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const dispatch = useDispatch();
+    const addTransactionState: IAddTransactionState = useSelector((state: any) => state.addTransaction);
+    const assetType = addTransactionState.assetType;
 
     useEffect(() => {
         if (searchTerm.length > 0) {
@@ -24,6 +29,19 @@ const SearchPage = () => {
             setSearchResults([]);
         }
     }, [searchTerm]);
+
+    const getTitle = () => {
+        switch (assetType) {
+            case ASSET_TYPE.STOCKS:
+                return 'Stock';
+            case ASSET_TYPE.MUTUAL_FUNDS:
+                return 'Fund';
+            case ASSET_TYPE.CRYPTO:
+                return 'Crypto';
+            default:
+                return '';
+        }
+    };
 
     const onAssetClick = (item : any) => {
         console.log(item);
@@ -46,6 +64,7 @@ const SearchPage = () => {
 
     return (
         <View style={styles.container}>
+            <TextBox size={20} >{`Add a transaction by searching for a ${getTitle()}`}</TextBox>
             <TextInput
                 style={styles.searchInput}
                 value={searchTerm}

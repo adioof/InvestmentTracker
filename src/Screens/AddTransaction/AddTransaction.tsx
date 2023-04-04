@@ -24,7 +24,7 @@ const AddTransaction: React.FC<IComponent> = () => {
     useEffect(() => {
         return navigation.addListener('beforeRemove', () => {
             // reset page
-            dispatch(setPage(TRANSACTION_PAGE.FINAL_TRANSACTION_PAGE));
+            dispatch(setPage(TRANSACTION_PAGE.SEARCH_PAGE));
         });
     }, [navigation]);
 

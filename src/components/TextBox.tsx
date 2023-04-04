@@ -22,8 +22,9 @@ export const TextBox = (props) => {
     <Text
       style={[
           {
-            fontFamily: getFontFromWeight(weight),
-            color: '#fff',
+              fontFamily: getFontFromWeight(weight),
+              color: '#fff',
+              fontSize: props.size,
           },
           styles(),
         ]

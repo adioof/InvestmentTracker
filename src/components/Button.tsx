@@ -19,12 +19,14 @@ export const Button = ({
                            buttonType = BUTTON_TYPE.MEDIUM,
                            withArrow = false,
                            disabled = false,
+                            backgroundColor = COLORS.PRIMARY,
                        }: {
     onPress: () => any;
     label: string;
     buttonType?: BUTTON_TYPE;
     withArrow?: boolean;
     disabled?: boolean;
+    backgroundColor?: string;
 }) => {
 
     const getWidth = () => {
@@ -45,7 +47,7 @@ export const Button = ({
                 style={{
                     width: getWidth(),
                     borderRadius: 20,
-                    backgroundColor: disabled ? COLORS.SECONDARY : COLORS.PRIMARY,
+                    backgroundColor: disabled ? COLORS.SECONDARY : (backgroundColor),
                     marginLeft: 50,
                     marginRight: 50,
                     borderWidth: 1,

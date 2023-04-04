@@ -10,6 +10,8 @@ import Splash from './src/Screens/Splash';
 import {SCREENS} from './src/engine/types';
 import AddTransaction from './src/Screens/AddTransaction/AddTransaction';
 import { Provider as StoreProvider } from 'react-redux';
+import Toast from 'react-native-toast-message';
+import {toastConfig} from './src/components/toastConfig';
 
 const darkTheme = {
   ...DefaultTheme,
@@ -46,6 +48,10 @@ const App = () => {
                   <Stack.Screen name={SCREENS.ADD_TRANSACTION} component={AddTransaction}  options={{ headerShown:false }}/>
               </Stack.Navigator>
           </NavigationContainer>
+          <Toast
+              ref={(ref) => Toast.setRef(ref)}
+              config={toastConfig}
+          />
       </StoreProvider>
   );
 };

@@ -19,6 +19,19 @@ export interface MetaProps {
   [x: string]: any;
 }
 
+
+export enum AlertType {
+  ERROR = 'error',
+  SUCCESS = 'success',
+  WARNING = 'warning',
+}
+export enum AlertDuration {
+  SHORT = 'short',
+  DEFAULT = 'default',
+  LONG = 'long',
+}
+
+
 export enum SCREENS {
   SPLASHSCREEN = 'SPLASHSCREEN',
   LOGIN = 'LOGIN',
@@ -36,4 +49,12 @@ export enum TRANSACTION_TYPE {
   BUY = 'buy',
   SELL = 'sell',
   TRANSFER = 'transfer',
+}
+
+export interface ASSET_STOCK {
+  symbol : string,
+  name: string,
+  region: string,
+  timezone: string,
+  currency: string
 }

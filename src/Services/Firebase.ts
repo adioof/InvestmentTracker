@@ -4,7 +4,6 @@ import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
 import {IUserCredential} from '../Screens/Login/Login.Types';
 import {ITransaction, IUser} from './Firebase.Types';
-import {AlertPosition, AlertType, showAlert} from './nativebaseAlerts';
 import {ErrorLogger, errorType} from './logger';
 import {TRANSACTIONS_COLLECTION, USERS_COLLECTION} from '../engine/constants';
 
@@ -56,12 +55,6 @@ export const loginWithGoogle = async (): Promise<IUser> => {
                     updatedAt: firestore.FieldValue.serverTimestamp() as any,
                 });
 
-            showAlert({
-                type: AlertType.SUCCESS,
-                message: `Welcome Back! ${user.firstName}`,
-                duration: 2000,
-                position: AlertPosition.BOTTOM,
-            });
             return user;
         } else {
             const newFirebaseUser: IUser = {
@@ -83,22 +76,10 @@ export const loginWithGoogle = async (): Promise<IUser> => {
                 .doc(userID)
                 .set(newFirebaseUser);
 
-            showAlert({
-                type: AlertType.SUCCESS,
-                message: `Welcome! ${newFirebaseUser.firstName}`,
-                duration: 2000,
-                position: AlertPosition.BOTTOM,
-            });
             return newFirebaseUser;
         }
     } catch (e : any) {
         ErrorLogger(e, errorType.userBreaking);
-        showAlert({
-            type: AlertType.WARNING,
-            message: 'There was an error!',
-            duration: 2000,
-            position: AlertPosition.BOTTOM,
-        });
         throw e;
     }
 };
@@ -113,6 +94,7 @@ export const getUserDetails = async (): Promise<IUser> => {
 };
 
 export const addTransactionFirebase = async (transaction: ITransaction): Promise<string> => {
+    console.log(transaction);
     const transactionRef: any = await firestore()
         .collection(TRANSACTIONS_COLLECTION)
         .add(transaction);

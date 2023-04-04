@@ -20,4 +20,6 @@ export interface ITransaction {
     time: any;
     assetType: ASSET_TYPE;
     transactionType: TRANSACTION_TYPE,
+    amount: number;
+    transactionPrice: number;
 }

@@ -4,12 +4,15 @@ import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datet
 import {TextBox} from '../../../components/TextBox';
 import {Button, BUTTON_TYPE} from '../../../components/Button';
 import {BackButton} from '../../../components/BackButton';
-import {setPage} from '../AddTransaction.actions';
+import {addTransaction, setPage} from '../AddTransaction.actions';
 import {useDispatch} from 'react-redux';
 import {TRANSACTION_PAGE} from '../AddTransaction.state';
 import {TextBoxInput} from '../../../components/TextBoxInput';
-import {TRANSACTION_TYPE} from '../../../engine/types';
+import {AlertType, TRANSACTION_TYPE} from '../../../engine/types';
 import BuySellButtons from '../../../components/BuySellButtons';
+import {COLORS} from '../../../engine/Theme';
+import {getDayDateFromDateObject, getTimeFromDateObject} from '../../../engine/helper';
+import {showToast} from '../../../Services/ToastAlert';
 
 const FinalTransactionPage = () => {
 
@@ -20,8 +23,8 @@ const FinalTransactionPage = () => {
     const [isTimePickerVisible, setTimePickerVisible] = useState(false);
     const [transactionType, setTransactionType] = useState(TRANSACTION_TYPE.BUY);
 
-    const [amount, setAmount] = useState(0);
-    const [buyPrice, setBuyPrice] = useState(0);
+    const [amount, setAmount] = useState(NaN);
+    const [transactionPrice, setTransactionPrice] = useState(NaN);
 
     const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
         const {
@@ -33,6 +36,10 @@ const FinalTransactionPage = () => {
             setDate(selectedDate);
         }
         setDatePickerVisible(false);
+    };
+
+    const isBuy = () => {
+        return transactionType === TRANSACTION_TYPE.BUY;
     };
 
     const handleTimeChange = (event: DateTimePickerEvent, currentTime?: Date) => {
@@ -54,19 +61,26 @@ const FinalTransactionPage = () => {
         // };
         //
         // fetchPrice();
-        setBuyPrice(10);
     }, [date, time]);
 
     const handleAddTransaction = () => {
-        // handle buy button press here
-        console.log(`Bought ${amount} shares on ${date.toLocaleDateString()} at ${time.toLocaleTimeString()} for ${buyPrice} per share`);
+        if (!transactionPrice) {
+            showToast('Please add price', AlertType.WARNING);
+            return;
+        }
+        if (!amount) {
+            showToast('Please add amount', AlertType.WARNING);
+            return;
+        }
+        console.log(`Bought ${transactionPrice} shares on ${date.toLocaleDateString()} at ${time.toLocaleTimeString()} for ${transactionPrice} per share`);
+        dispatch(addTransaction(amount, transactionPrice, transactionType));
     };
 
     return (
         <View style={{flex:1, alignItems: 'center'}}>
-            <View>
+            <View style={{ width: '100%' }}>
                 <BackButton onClick={() => {dispatch(setPage(TRANSACTION_PAGE.SEARCH_PAGE));}}/>
-                <View style={{ alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', marginBottom: 10 }}>
                     <BuySellButtons getTransactionType={(transactionType : TRANSACTION_TYPE)=> {
                         setTransactionType(transactionType);
                     }} />
@@ -75,9 +89,9 @@ const FinalTransactionPage = () => {
                 <TouchableWithoutFeedback onPress={() => {
                     setDatePickerVisible(true);
                 }}>
-                    <View style={{ padding: 10 }}>
-                        <TextBox>Select Date:</TextBox>
-                        <TextBox>{date.toString()}</TextBox>
+                    <View style={{ paddingVertical: 10 }}>
+                        <TextBox size={16} style={{ color: COLORS.LIGHT_GREY }}>Date</TextBox>
+                        <TextBox size={19}>{getDayDateFromDateObject(date)}</TextBox>
                         {isDatePickerVisible &&
                             <DateTimePicker value={date} mode="date" display="default"
                                             maximumDate={new Date()}
@@ -90,37 +104,38 @@ const FinalTransactionPage = () => {
                 <TouchableWithoutFeedback onPress={() => {
                     setTimePickerVisible(true);
                 }}>
-                    <View style={{ padding: 10 }}>
-                        <TextBox>Select Time:</TextBox>
-                        <TextBox>{time.toString()}</TextBox>
+                    <View style={{ paddingVertical: 10, marginBottom: 10 }}>
+                        <TextBox size={16} style={{  color: COLORS.LIGHT_GREY }}>Time</TextBox>
+                        <TextBox size={19}>{getTimeFromDateObject(time)}</TextBox>
                         {isTimePickerVisible &&
                             <DateTimePicker value={time} mode="time" maximumDate={new Date()}
                                             display="default" onChange={handleTimeChange} />
                         }
                     </View>
                 </TouchableWithoutFeedback>
-                <View>
-
-                </View>
                 <TextBoxInput
-                    style={{ fontSize: 19 }}
-                    placeholder={'Amount'}
+                    size={19}
+                    placeholder={`${isBuy() ? 'Buy' : 'Sell' } price`}
                     onChangeText={(text : number) => {
-                        setAmount(text);
+                        setTransactionPrice(Number(text));
                     }}
                     isNumber={true}
                 />
                 <TextBoxInput
-                    style={{ fontSize: 19 }}
-                    placeholder={`${transactionType === TRANSACTION_TYPE.BUY ? 'Buy' : 'Sell' } price`}
+                    size={19}
+                    placeholder={'Amount'}
                     onChangeText={(text : number) => {
-                        setBuyPrice(text);
+                        setAmount(Number(text));
                     }}
                     isNumber={true}
                 />
             </View>
             <View style={{ position: 'absolute', bottom: 30, alignItems: 'center' }}>
-                <Button label={'Add transaction'} buttonType={BUTTON_TYPE.LONG} onPress={handleAddTransaction} />
+                <Button
+                    backgroundColor={isBuy() ? COLORS.LIGHT_GREEN : COLORS.LIGHT_RED}
+                    label={'Add transaction'}
+                    buttonType={BUTTON_TYPE.LONG}
+                    onPress={handleAddTransaction} />
             </View>
 
         </View>

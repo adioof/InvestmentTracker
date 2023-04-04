@@ -1,6 +1,6 @@
 export const COLORS = {
   PRIMARY: '#ffffff',
-  SECONDARY: '#EEEDFF',
+  SECONDARY: '#cecece',
   TRANSPARENT: 'rgba(0,0,0,0)',
 
   BG_PRIMARY: '#000000',

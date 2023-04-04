@@ -6,6 +6,32 @@ export const getTime = (data : any) => {
     }
 };
 
+export const getTimeFromDateObject = (date : Date) => {
+    try {
+        return `${date.getHours()} : ${date.getMinutes()}`;
+    } catch (e) {
+        return '';
+    }
+};
+
+export const getDayDateFromDateObject = (date : Date) => {
+    try {
+        return `${getDayFromDate(date)}, ${date.getDate()} ${getMonthFromDate(date)} ${date.getFullYear()}`;
+    } catch (e) {
+        return '';
+    }
+};
+
+const getDayFromDate = (date : Date) => {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return days[date.getDay()];
+};
+
+const getMonthFromDate = (date : Date) => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[date.getMonth()];
+};
+
 export const getFinalDateTimeResultObject = (time: Date, date: Date) => {
    return new Date(
         date.getFullYear(),

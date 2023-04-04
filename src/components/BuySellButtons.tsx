@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {TRANSACTION_TYPE} from '../engine/types';
 import {TextBox} from './TextBox';
+import {COLORS} from '../engine/Theme';
 
 const ButtonsComponent = ({ getTransactionType } : {
     getTransactionType: (transactionType : TRANSACTION_TYPE) => any
@@ -32,7 +33,7 @@ const ButtonsComponent = ({ getTransactionType } : {
                     marginRight: 5,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderColor: isBuy() ? 'green' : 'grey',
+                    borderColor: isBuy() ? COLORS.LIGHT_GREEN : 'grey',
                 }}
                 onPress={() => handleButtonClick(TRANSACTION_TYPE.BUY)}>
                 <TextBox style={{
@@ -48,7 +49,7 @@ const ButtonsComponent = ({ getTransactionType } : {
                     marginLeft: 5,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderColor: isSell() ? 'red' : 'grey',
+                    borderColor: isSell() ? COLORS.LIGHT_RED : 'grey',
                 }}
                 onPress={() => handleButtonClick(TRANSACTION_TYPE.SELL)}>
                 <TextBox style={{
